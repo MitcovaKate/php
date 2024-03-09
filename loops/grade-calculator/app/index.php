@@ -9,7 +9,7 @@
       if (!is_numeric($input)) {
         return false;
       }
-      if(!preg_match('/^[0-9]+$/', $input)){
+      if(!preg_match('/\b([0-9]|10)\b/', $input)){
         return false; 
       }
       return true;
