@@ -28,4 +28,5 @@ $tours=[
 
 ];
 
+save($tours,'tour');
 ?>
