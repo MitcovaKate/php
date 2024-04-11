@@ -9,7 +9,10 @@ index.php?page=support
 ----------------------
 header(header.php)
 ----------------------
-content(support.php)<---->dydamic
+content(support.php)<---->dydamic +-----home.php
+                                  +-----tours.php
+                                  +-----support.php
+                                  +-----contacts.php
 ----------------------
 footer(footer.php)
 
