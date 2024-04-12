@@ -1,34 +1,50 @@
 <?
-// $file=fopen("./data/tour.json","r");
-// $tours=json_decode(fread($file,100000), true);
-// fclose($file);
+  $file=fopen("./data/tours.json","r");
+  $tours=json_decode(fread($file,100000), true);
+ fclose($file);
 
-$tours=load('tour');
-if(isset($_POST['search'])){
+// $tours=load('tours');
+  if(isset($_POST['search'])){
     $tours=array_filter($tours,function($tour){
         return 
-        similar_text($tour['name'], $_POST['search'])>=3 || $_POST['search'] == '';
+       similar_text($tour['name'], $_POST['search'])>=3 || $_POST['search'] == '';
         
-    }) ;
-}
-$tours=array_values($tours);
-?>
+   }) ;
+  }
+ $tours=array_values($tours);
+ ?>
 <?
-if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
-    $minPrice = (int) $_POST['min_price'];
-    $maxPrice = (int) $_POST['max_price'];
+  if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
+     $minPrice = (int) $_POST['min_price'];
+     $maxPrice = (int) $_POST['max_price'];
   
-    $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
+   $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
       return $tour['price']['amount'] >= $minPrice && $tour['price']['amount'] <= $maxPrice;
+});
+}
+  if (isset($_POST['min_price']) || isset($_POST['max_price'])) {
+    $minPrice = isset($_POST['min_price']) ? (int) $_POST['min_price'] : null;
+    $maxPrice = isset($_POST['max_price']) ? (int) $_POST['max_price'] : null;
+    $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
+        if ($minPrice !== null && $tour['price']['amount'] < $minPrice) {
+           return false;
+        }
+
+       if($maxPrice !== null && $tour['price']['amount'] >= $maxPrice) {
+            return false;
+        }
+
+        return true;
     });
-  }?>
+}
+  ?>
 
 <section>
 <h1>Tours:</h1>
 <!-- //filters -->
 
 
-<form action="?page=tours" method="POST">
+ <form action="?page=tours" method="POST">
     <input type="text" placeholder="enter keywords..." value="<?=$_POST['search'] ?? ''?>">
     <button>SEARCH</button>
 </form>
@@ -36,7 +52,7 @@ if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
   <input type="number" name="min_price" placeholder="Min price">
   <input type="number" name="max_price" placeholder="Max price">
   <button type="submit">Filter by price</button>
-</form>
+</form> 
 <!--  -->
     <ol>
         <?php
@@ -52,6 +68,9 @@ if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
         <?php } ?>
     </ol>
 </section>   
+    
+
+
     
 
 
