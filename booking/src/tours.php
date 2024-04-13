@@ -7,52 +7,116 @@
   if(isset($_POST['search'])){
     $tours=array_filter($tours,function($tour){
         return 
-       similar_text($tour['name'], $_POST['search'])>=3 || $_POST['search'] == '';
+       !(stripos($tour['name'], $_POST['search']) === false) || $_POST['search'] == '';
         
    }) ;
   }
- $tours=array_values($tours);
- ?>
-<?
-  if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
-     $minPrice = (int) $_POST['min_price'];
-     $maxPrice = (int) $_POST['max_price'];
+
+// и min и max
+//   if (isset($_POST['min_price']) && isset($_POST['max_price'])) {
+//      $minPrice = (int) $_POST['min_price'];
+//      $maxPrice = (int) $_POST['max_price'];
   
-   $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
-      return $tour['price']['amount'] >= $minPrice && $tour['price']['amount'] <= $maxPrice;
-});
-}
-  if (isset($_POST['min_price']) || isset($_POST['max_price'])) {
-    $minPrice = isset($_POST['min_price']) ? (int) $_POST['min_price'] : null;
-    $maxPrice = isset($_POST['max_price']) ? (int) $_POST['max_price'] : null;
-    $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
-        if ($minPrice !== null && $tour['price']['amount'] < $minPrice) {
-           return false;
-        }
+//    $tours = array_filter($tours, function ($tour) use ($minPrice, $maxPrice) {
+//       return $tour['price']['amount'] >= $minPrice && $tour['price']['amount'] <= $maxPrice;
+// });
+// }
 
-       if($maxPrice !== null && $tour['price']['amount'] >= $maxPrice) {
-            return false;
-        }
-
-        return true;
+  // только min 
+    if (isset($_POST['min_price'])){
+    $tours = array_filter($tours, function ($tour) {
+   return
+     $tour['price']['amount'] >=(int)$_POST['min_price'];
     });
 }
-  ?>
+// только max
+if (isset($_POST['max_price'])){
+  $tours = array_filter($tours, function ($tour) {
+ return
+   $tour['price']['amount'] <=(int)$_POST['max_price'];
+  });
+}// результат и min и max и minmax
+
+
+// если применять button 
+// if(isset($_POST['sort_desc'])){
+// usort($tours, function($tour_a, $tour_b ){
+// return $tour_b['price']['amount'] - $tour_a['price']['amount'];
+// });
+
+// }  
+// if(isset($_POST['sort_asc'])){
+//   usort($tours, function($tour_a, $tour_b ){
+//   return $tour_a['price']['amount'] - $tour_b['price']['amount'];
+//   });
+  
+//   }  
+
+
+
+// hw2 radio buttons
+
+if (isset($_POST['sort'])) {
+  $sort = $_POST['sort'];
+  if ($sort === 'desc') {
+      usort($tours, function($tour_a, $tour_b) {
+          return $tour_b['price']['amount'] - $tour_a['price']['amount'];
+      });
+  } else if ($sort === 'asc') {
+      usort($tours, function($tour_a, $tour_b) {
+          return $tour_a['price']['amount'] - $tour_b['price']['amount'];
+      });
+  }
+}
+ $tours=array_values($tours);
+?>
 
 <section>
 <h1>Tours:</h1>
 <!-- //filters -->
 
 
- <form action="?page=tours" method="POST">
-    <input type="text" placeholder="enter keywords..." value="<?=$_POST['search'] ?? ''?>">
-    <button>SEARCH</button>
+ <form action="?page=tours" method="POST" id="tour-form">
+  <fieldset>
+    <legend>name</legend>
+    <input type="text" 
+           placeholder="enter keywords..." 
+           value="<? $_POST['search'] ?? ''?>">
+   </fieldset>
+
+  <fieldset>
+      <legend>price</legend>
+      <input type="number" 
+             name="min_price"
+             placeholder="Min price"
+             value="<?$_POST['min_price'] ?? ''?>">
+
+       <input type="number" 
+              name="max_price" 
+              placeholder="Max price"
+              value="<? $_POST['max_price'] ?? ''?>">
+    </fieldset>
+      <button>SEARCH</button>
+        <fieldset>
+          <legend>sort</legend>
+          <!-- <button name="sort_desc">v</button>
+          <button name="sort_asc">^</button> -->
+<!-- 
+hw2 use radio buttons -->
+     <input type="radio" 
+            name="sort"
+            value="desc"
+            id="sort_desc"> ˅
+     <input 
+           type="radio" 
+           name="sort" 
+           value="asc"
+           id="sort_asc"
+           > ˄
+        </fieldset>
+  
 </form>
-<form action="?page=tours" method="POST">
-  <input type="number" name="min_price" placeholder="Min price">
-  <input type="number" name="max_price" placeholder="Max price">
-  <button type="submit">Filter by price</button>
-</form> 
+
 <!--  -->
     <ol>
         <?php
@@ -69,9 +133,16 @@
     </ol>
 </section>   
     
+<script>
+  const sortDescRadio = document.getElementById('sort_desc');
+  const sortAscRadio = document.getElementById('sort_asc');
+  const tourForm = document.getElementById('tour-form');
 
+  sortDescRadio.addEventListener('change', function() {
+    tourForm.submit();
+  });
 
-    
-
-
-
+  sortAscRadio.addEventListener('change', function() {
+    tourForm.submit(); 
+  });
+</script>
