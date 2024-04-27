@@ -5,18 +5,20 @@
 <div class="map-container">
 
     <div class="vert">
-        <?php for ($rn = 1; $rn <= 10; $rn++) { ?>
-            <div class="num"><?= $rn ?></div>
+        <?php for ($i = 1; $i<= 10; $i++) { ?>
+            <div class="num"><?= $i ?></div>
         <?php } ?>
     </div>
     
 
     <div class="horiz">
-
-        <div class="letters"> 
-            <?php foreach (range('A', 'J') as $let) { ?>
-                <div class="let"><?= $let ?></div>
-            <?php } ?>
+        
+            
+        <div class="letters">
+    <?php for ($i = 0; $i < 10; $i++) { ?>
+        <div class="let"><?= chr(65 + $i) ?></div>
+    <?php } ?>
+         
         </div>
 
         <div class="map">
