@@ -53,3 +53,33 @@ v
                                    render
                                     |
 <----------- res -------------------+
+
+
+
+index.php
+ |
+ |
+ +---< require_once 'map.php'
+ |                     |
+ |                     +--$map
+ |
+ +--------<  require_once 'lib.php'
+ |                            |
+ |                            +--render_map($map)
+ |
+ |
+ |
+ +--------$coords=get_coords($_GET)
+ |             |
+ |             +----
+ |                   V              
+ +---$map=shoot($map,$coords)
+ |     |
+ |     +----------+-------+
+ |                V       |
+ +---render_map($map)     |
+ |               ---------+
+ |              |
+ |              V
+ +---save_map($map)----->map.json
+ 
