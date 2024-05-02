@@ -1,8 +1,9 @@
 <?require_once 'lib.php'?>
 <?require_once 'map.php' ?>
-<? $map = load_map() ?>
-<? $coords = get_coords($_GET)?>
-<?$map = shoot($map,$coords)?>
+<? $map_ship = load_map('map_ship');?>
+<? $map_state = load_map('map_state');?>
+<?$coords = get_coords($_GET)?>
+<?$map_state = shoot($map_state,$coords)?> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +13,8 @@
 </head>
 <body>
     <div class="container">
-        <?= render_map($map)?>
+        <?= render_map($map_ship,$map_state)?>
     </div>
 </body>
 </html>
-<? save_map($map) ?> 
+<? save_map($map_state,'map_state') ?> 
