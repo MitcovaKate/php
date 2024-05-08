@@ -60,4 +60,29 @@ function save_map($map, $map_name){
 function load_map( $map_name){
   return  json_decode(file_get_contents("./data/{$map_name}.json"),true);  
     }
+    function load_users(){
+     return  json_decode(file_get_contents("./data/users.json"),true);  
+       }
+
+       function user_exists($users,$username,$password){
+          $found = false;
+
+          // hw1 array_filter
+
+          // $filter = array_filter($users, function($user) use ($username, $password) {
+          //      return $user['username'] == $username && $user['password'] == $password;
+          //    });
+             
+          //    if (!empty($filter)) {
+          //      $found = true;
+
+       for($i=0 ; $i<count($users) ; $i++){
+       if($users[$i]['username'] == $username && $users[$i]['password'] == $password){
+         $found = true;
+        break;
+    }
+      }
+     return $found;
+}
 ?>
+
