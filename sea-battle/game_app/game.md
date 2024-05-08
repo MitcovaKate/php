@@ -82,4 +82,33 @@ index.php
  |              |
  |              V
  +---save_map($map)----->map.json
+
+ 
+---------GET req/match.php----->match.php---+
+                                            |
+                                            +
++--------res HTML---------------------------
+
+form1---POST req/login-action.php---------->+ 
+                                               \
+                                                  +--->login-action.php
+                                                           |
+                                               /           |
+form2---POST req/login-action.php---------->+              +---$users=load_users()
+                                                           |
+                                                           +--for + if / search
+                                                           V
+                                                $username == 'player' && $password == '123'--+
+                                                           |                                  |
+                                                          true                              false                                    
+                                                           |                                  |
+                                                           V                                  V
+                                                                                      redirect->match.php
+                                                                                              |
+                                    < ---------------------  res ---------------------------- +
+                                      [HHH][]
+                                        ^
+                                        |
+                                        header("location:match.php")
+
  
